@@ -7,10 +7,8 @@ import com.controller.UserController;
 import org.json.JSONObject;
 
 import javax.websocket.*;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nathan on 2018/1/14.
