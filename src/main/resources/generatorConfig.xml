@@ -75,10 +75,10 @@
         </javaClientGenerator>
 
 
-        <table tableName="users" schema="app">
+        <table tableName="user" schema="app">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="restaurants" schema="app">
+        <table tableName="restaurant" schema="app">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="user_order_history" schema="app">
