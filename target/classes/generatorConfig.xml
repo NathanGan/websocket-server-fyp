@@ -50,7 +50,7 @@
                 type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
-        <javaClientGenerator targetPackage="com.dao" targetProject="src/main/java" type="MIXEDMAPPER">
+        <javaClientGenerator targetPackage="com.dao" targetProject="src/main/java" type="XMLMAPPER">
             <property name="enableSubPackages" value=""/>
             <!--
                     定义Maper.java 源代码中的ByExample() 方法的可视性，可选的值有：
@@ -60,7 +60,7 @@
                     default
                     注意：如果 targetRuntime="MyBatis3",此参数被忽略
              -->
-            <property name="exampleMethodVisibility" value="true"/>
+            <property name="exampleMethodVisibility" value="public"/>
             <!--
                                            方法名计数器
               Important note: this property is ignored if the target runtime is MyBatis3.
@@ -79,12 +79,6 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="restaurant" schema="app">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="online_record" schema="app">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="record_offline" schema="app">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="user_order_history" schema="app">

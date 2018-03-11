@@ -15,7 +15,7 @@ public interface RestaurantService {
     public ArrayList<Restaurant> getNearByRestaurants(int distance, int num);
     public ArrayList<Restaurant> getRestaurantsByTag(ArrayList<String> constrains);
     public ArrayList<Restaurant> getRecommendRestaurants(String username);
-    public ArrayList<Restaurant> getViewHistory(String username);
+    public ArrayList<Restaurant> getViewHistory(int uid);
     public ArrayList<String> getSharersInRestaurant(ArrayList<Restaurant> restaurants);
 
 }

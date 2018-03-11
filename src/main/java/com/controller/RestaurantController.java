@@ -1,22 +1,10 @@
 package com.controller;
 
 import com.model.Restaurant;
-import com.model.User;
-import com.mongodb.util.JSON;
 import com.service.RestaurantService;
-import com.service.UserService;
-import com.serviceImpl.RestaurantServiceImpl;
-import com.serviceImpl.UserServiceImpl;
-import com.util.JSONUtil;
 import com.util.StatusCode;
 import org.json.JSONObject;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -34,11 +22,11 @@ public class RestaurantController {
         // create new object for dao and response
         StatusCode statusCode = null;
         RestaurantService restaurantService = null;
-        try {
-            restaurantService = new RestaurantServiceImpl();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            restaurantService = new RestaurantServiceImpl();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         Restaurant restaurant = restaurantService.searchRestaurantByName(name);
         return responseParams;
     }
@@ -49,44 +37,44 @@ public class RestaurantController {
             constrains.add(tag);
         }
         RestaurantService restaurantService = null;
-        try {
-            restaurantService = new RestaurantServiceImpl();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            restaurantService = new RestaurantServiceImpl();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         ArrayList<Restaurant> restaurants = restaurantService.getRestaurantsByTag(constrains);
         return responseParams;
     }
     public JSONObject actionSearchRestaurantByDistance(){
         int distance = requestParams.getInt("distance");
         RestaurantService restaurantService = null;
-        try {
-            restaurantService = new RestaurantServiceImpl();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            restaurantService = new RestaurantServiceImpl();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         ArrayList<Restaurant> restaurants = restaurantService.getNearByRestaurants(distance,10);
         return responseParams;
     }
     public JSONObject actionGetRecommendedRestaurants(){
         String username = requestParams.getString("username");
         RestaurantService restaurantService = null;
-        try {
-            restaurantService = new RestaurantServiceImpl();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            restaurantService = new RestaurantServiceImpl();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         ArrayList<Restaurant> restaurants = restaurantService.getRecommendRestaurants(username);
         return responseParams;
     }
     public JSONObject actionGetHistoryRestaurants(){
         String username = requestParams.getString("username");
         RestaurantService restaurantService = null;
-        try {
-            restaurantService = new RestaurantServiceImpl();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            restaurantService = new RestaurantServiceImpl();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         ArrayList<Restaurant> restaurants = restaurantService.getViewHistory(username);
         return responseParams;
     }
@@ -94,11 +82,11 @@ public class RestaurantController {
         String username = requestParams.getString("username");
         String restaurant = requestParams.getString("restaurant");
         RestaurantService restaurantService = null;
-        try{
-            restaurantService = new RestaurantServiceImpl();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+//        try{
+//            restaurantService = new RestaurantServiceImpl();
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
         return responseParams;
     }
 }

@@ -1,35 +1,25 @@
 package com.controller;
 
-import com.dao.UserMapper;
-import com.model.Location;
 import com.model.User;
-import com.service.LocationBasedService;
 import com.service.MongoDBService;
 import com.service.UserService;
-import com.serviceImpl.LocationBasedServiceImpl;
-import com.serviceImpl.MongoDBServiceImpl;
-import com.serviceImpl.UserServiceImpl;
-import com.util.JSONUtil;
+import com.service.MongoDBServiceImpl;
+import com.service.UserServiceImpl;
 import com.util.StatusCode;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
+import javax.annotation.Resource;
+import java.io.IOException;
 
 /**
  * Created by nathan on 2017/11/4.
  */
+@Controller
 public class UserController {
+
+    private UserService userService;
 
     private JSONObject requestParams;
     private JSONObject responseParams = new JSONObject();
@@ -42,18 +32,23 @@ public class UserController {
      * MySQL
      * @throws Exception
      */
-    public JSONObject actionNewSignUp(){
+    public JSONObject actionNewSignUp() throws IOException {
         // Parse request data
-        String name = requestParams.getString("name");
+        String name = requestParams.getString("username");
         String password = requestParams.getString("password");
-        User user = new User(null,name,password,null,null,false,1);
+        String type = requestParams.getString("userType");
+        User user = new User(name,password,type);
         StatusCode statusCode = null;
-        UserService userService = new UserServiceImpl();
-        if(userService.createUser(user)==true){
-            responseParams.put("responseType","signupSuc");
+//        UserService userService = new UserServiceImpl();
+        userService = new UserServiceImpl("mysql");
+        int uid = userService.signupUser(user);
+        if(uid!=-1){
+            responseParams.put("uid",uid);
+            responseParams.put("responseType","SIGNUP_SUCCESS");
         }
         else{
-            responseParams.put("responseType","signupFail");
+            responseParams.put("uid",-1);
+            responseParams.put("responseType","SIGNUP_FAIL");
         }
         // send data back to client
         return responseParams;
@@ -64,16 +59,22 @@ public class UserController {
      * MySQL
      * @throws Exception
      */
-    public JSONObject actionSignIn(){
+    public JSONObject actionSignIn() throws IOException {
         String name = requestParams.getString("name");
         String password = requestParams.getString("password");
         User user = new User(name,password);
         UserService userService = new UserServiceImpl("mysql");
-        if(userService.verifyUser(user)==true){
-            responseParams.put("responseType","loginSuc");
-        }else{
-            responseParams.put("responseType","loginFail");
+
+        int uid = userService.signinUser(user);
+        if(uid!=-1){
+            responseParams.put("uid",uid);
+            responseParams.put("responseType","SIGNIN_SUCCESS");
         }
+        else{
+            responseParams.put("uid",-1);
+            responseParams.put("responseType","SIGNIN_FAIL");
+        }
+        // send data back to client
         return responseParams;
     }
 
@@ -91,7 +92,7 @@ public class UserController {
     /**
      * MySQL
      */
-    public JSONObject actionAddFriend(){
+    public JSONObject actionAddFriend() throws IOException {
         String name = requestParams.getString("name");
         UserService userService = new UserServiceImpl();
         System.out.println("actionAddFriend");

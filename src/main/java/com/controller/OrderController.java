@@ -4,8 +4,8 @@ import com.model.Orders;
 import com.model.User;
 import com.service.OrderService;
 import com.service.UserService;
-import com.serviceImpl.OrderServiceImpl;
-import com.serviceImpl.UserServiceImpl;
+import com.service.OrderServiceImpl;
+import com.service.UserServiceImpl;
 import com.util.StatusCode;
 import org.json.JSONObject;
 
@@ -23,7 +23,7 @@ public class OrderController{
         this.requestParams = requestParams;
     }
 
-    public JSONObject actionGetHistoryOrders() {
+    public JSONObject actionGetHistoryOrders() throws IOException {
 
         String name = requestParams.getString("name");
         String password = requestParams.getString("password");
@@ -37,13 +37,13 @@ public class OrderController{
             e.printStackTrace();
         }
         ArrayList<Orders> orders = null;
-        if(userService.verifyUser(user)==true){
-            if(type.equals("shared"))
-                orders = orderService.searchSharedRecords(user);
-            if(type.equals("shareto"))
-                orders = orderService.searchShareToRecords(user);
-        }else{
-        }
+//        if(userService.verifyUser(user)==true){
+//            if(type.equals("shared"))
+//                orders = orderService.searchSharedRecords(user);
+//            if(type.equals("shareto"))
+//                orders = orderService.searchShareToRecords(user);
+//        }else{
+//        }
         JSONObject responseParams = new JSONObject();
         responseParams.put("orders",orders);
         return responseParams;
@@ -70,18 +70,18 @@ public class OrderController{
     }
 
 
-    public JSONObject actionTerminateAnOrder(){
+    public JSONObject actionTerminateAnOrder() throws IOException {
         String username = requestParams.getString("username");
         String password = requestParams.getString("password");
         User user = new User(username, password);
         UserService userService = new UserServiceImpl();
 
         StatusCode statusCode = null;
-        if(userService.verifyUser(user)==true){
-            statusCode = new StatusCode(1, null);
-        }else{
-            statusCode = new StatusCode(0, null);
-        }
+//        if(userService.verifyUser(user)==true){
+//            statusCode = new StatusCode(1, null);
+//        }else{
+//            statusCode = new StatusCode(0, null);
+//        }
         return responseParams;
     }
 

@@ -1,32 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <!-- name for java bean -->
-    <typeAliases>
-        <package name="com.mybatis.model" />
-    </typeAliases>
 
-    <!-- environment settings -->
+    <!--
+        类型别名只是Java类型的别名，它可以有效减少Xml配置文件中映射查询语句里
+        返回类型(resultType)为自定义实体类的完全限定名冗余
+    -->
+    <!--<typeAliases>-->
+        <!--<typeAlias alias="narCode" type="com.test.model.NarCode" />-->
+    <!--</typeAliases>-->
+    <!--
+         获取数据库连接实例的数据源（DataSource）和决定事务作用域和控制方式的事务管理器（TransactionManager）
+     -->
     <environments default="development">
-
         <environment id="development">
-            <transactionManager type="JDBC" />
+
+            <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://localhost:3306/app"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/app" />
                 <property name="username" value="root" />
                 <property name="password" value="123456" />
             </dataSource>
         </environment>
-
     </environments>
+
+    <!-- 程序中所用到sql映射文件都在这里列出，这些映射sql都被Mybatis管理 -->
     <mappers>
-        <mapper resource="com/mapper/OnlineRecordMapper.xml" />
-        <mapper resource="com/mapper/OrdersMapper.xml" />
-        <mapper resource="com/mapper/RecordOfflineMapper.xml" />
-        <mapper resource="com/mapper/RestaurantMapper.xml" />
         <mapper resource="com/mapper/UserMapper.xml" />
+        <mapper resource="com/mapper/OrdersMapper.xml" />
+        <mapper resource="com/mapper/RestaurantMapper.xml" />
         <mapper resource="com/mapper/UserOrderHistoryMapper.xml" />
         <mapper resource="com/mapper/UserRestaurantHistoryMapper.xml" />
+
     </mappers>
 </configuration>

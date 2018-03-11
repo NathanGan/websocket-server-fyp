@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public interface UserService {
 
 
-    public boolean createUser(User user);
-    public boolean verifyUser(User user);
+    public int signupUser(User user);
+    public int signinUser(User user);
     public int signoffUser(User user);
     public int updateUser(User user);
     public User getUserByName(String name);

@@ -7,8 +7,12 @@ import com.controller.UserController;
 import org.json.JSONObject;
 
 import javax.websocket.*;
+import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpoint;
+import javax.websocket.server.ServerEndpointConfig;
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by nathan on 2018/1/14.
@@ -24,22 +28,25 @@ public class WebSocketEntry {
     private RedisController redisController;
     private RestaurantController restaurantController;
     private JSONObject responseParams;
+
+    private static Map<String, Session> userSessions = new ConcurrentHashMap<>();
     //连接时执行
     @OnOpen
     public void onOpen(Session session) throws IOException {
         this.session = session;
         this.sessionId = session.getId();
-
+        userSessions.put(this.sessionId,this.session);
         System.out.println("New Connection: "+sessionId);
     }
     //关闭时执行
     @OnClose
     public void onClose() {
         System.out.println("Close Connection: "+sessionId);
+        userSessions.remove(sessionId);
     }
     //收到消息时执行
     @OnMessage
-    public void onMessage(String message, Session session) throws IOException {
+    public void onMessage(String message) throws IOException {
         System.out.println("Get Message From: "+sessionId);
         JSONObject requestParams = new JSONObject(message);
         String requestType = (String)requestParams.getString("type");
@@ -106,28 +113,23 @@ public class WebSocketEntry {
                 break;
             // requester calls sharer for an order
             case "callOrder":
-                orderController = new OrderController(requestParams);
-                responseParams = orderController.actionCallAnOrder();
+
                 break;
             // sharer answers requester for start an order
             case "answerOrder":
-                orderController = new OrderController(requestParams);
-                responseParams = orderController.actionAnswerAnOrder();
+
                 break;
             // terminate an order
             case "terminateOrder":
-                orderController = new OrderController(requestParams);
-                responseParams = orderController.actionTerminateAnOrder();
+
                 break;
             // finish an order
             case "finishOrder":
-                orderController = new OrderController(requestParams);
-                responseParams = orderController.actionFinishAnOrder();
+
                 break;
             // add comment to order
             case "commentOrder":
-                orderController = new OrderController(requestParams);
-                responseParams = orderController.actionAddCommentToOrder();
+
             // send message to the others
             case "sendMessage":
                 orderController = new OrderController(requestParams);
@@ -162,5 +164,11 @@ public class WebSocketEntry {
     }
     void sendMessage(JSONObject responseParams) throws IOException{
         this.session.getAsyncRemote().sendText(responseParams.toString());
+    }
+    void sendMsg2User(String uid, String message) throws IOException{
+        userSessions.get(uid).getAsyncRemote().sendText(message);
+    }
+    void sendSignal2User(String uid, String signal) throws IOException{
+        this.userSessions.get(uid).getAsyncRemote().sendText(signal);
     }
 }
