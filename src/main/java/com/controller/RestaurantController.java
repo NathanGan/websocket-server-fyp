@@ -75,7 +75,7 @@ public class RestaurantController {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        ArrayList<Restaurant> restaurants = restaurantService.getViewHistory(username);
+//        ArrayList<Restaurant> restaurants = restaurantService.getViewHistory(username);
         return responseParams;
     }
     public JSONObject actionAssignRestaurant(){

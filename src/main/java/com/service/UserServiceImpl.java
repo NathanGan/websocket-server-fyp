@@ -81,12 +81,28 @@ public class UserServiceImpl implements UserService {
      */
     public int signinUser(User user) {
         try{
+            System.out.println("signinUser");
             UserExample signin = new UserExample();
             signin.createCriteria().andNameEqualTo(user.getName()).andPasswordEqualTo(user.getPassword());
-            return userMapper.selectByExample(signin).get(0).getId();
+            User newUser = userMapper.selectByExample(signin).get(0);
+            newUser.setSessionid(user.getSessionid());
+            userMapper.updateByPrimaryKey(newUser);
+            return newUser.getId();
         }catch (Exception e){
             return -1;
         }
+    }
+
+    @Override
+    public int updateUserSession(User user) {
+        try{
+            UserExample updateSession = new UserExample();
+            updateSession.createCriteria().andNameEqualTo(user.getName());
+            return userMapper.updateByExample(user,updateSession);
+        }catch (Exception e){
+            return -1;
+        }
+
     }
 
     public int signoffUser(User user) {
@@ -102,6 +118,22 @@ public class UserServiceImpl implements UserService {
             return 1;
         }catch (Exception e){
             return 0;
+        }
+    }
+
+    /**
+     * get session id by name
+     * @param name
+     * @return
+     */
+    @Override
+    public String getUserSessionId(String name) {
+        try{
+            UserExample getSessionId = new UserExample();
+            getSessionId.createCriteria().andNameEqualTo(name);
+            return userMapper.selectByExample(getSessionId).get(0).getSessionid();
+        }catch(Exception e){
+            return null;
         }
     }
 

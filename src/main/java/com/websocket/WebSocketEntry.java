@@ -36,6 +36,7 @@ public class WebSocketEntry {
         this.session = session;
         this.sessionId = session.getId();
         userSessions.put(this.sessionId,this.session);
+
         System.out.println("New Connection: "+sessionId);
     }
     //关闭时执行
@@ -54,7 +55,7 @@ public class WebSocketEntry {
             // sign in
             case "signIn":
                 userController = new UserController(requestParams);
-                responseParams = userController.actionSignIn();
+                responseParams = userController.actionSignIn(sessionId);
                 break;
             // sign up
             case "signUp":
@@ -132,8 +133,7 @@ public class WebSocketEntry {
 
             // send message to the others
             case "sendMessage":
-                orderController = new OrderController(requestParams);
-                responseParams = orderController.actionSendMessage();
+                sendMsg2User(requestParams,responseParams);
                 break;
             // get all history orders
             case "historyOrder":
@@ -165,10 +165,28 @@ public class WebSocketEntry {
     void sendMessage(JSONObject responseParams) throws IOException{
         this.session.getAsyncRemote().sendText(responseParams.toString());
     }
-    void sendMsg2User(String uid, String message) throws IOException{
-        userSessions.get(uid).getAsyncRemote().sendText(message);
+
+    /**
+     *
+     * @param requestParams params received from sender
+     * @param responseParams params to feed back to sender
+     * @return the processed responseParams
+     * @throws IOException
+     */
+    JSONObject sendMsg2User(JSONObject requestParams, JSONObject responseParams) throws IOException{
+        userController = new UserController(requestParams);
+        String sessionid = userController.actionGetUserSession();
+        if(sessionid==null){
+            responseParams.put("responseType","SENDMSG_FAIL");
+        }else{
+            responseParams.put("responseType","SENDMSG_SUCCESS");
+            responseParams.put("message",requestParams.getString("message"));
+            JSONObject sendParams = new JSONObject();
+            sendParams.put("responseType","MSG_COMEIN");
+            sendParams.put("message",requestParams.getString("message"));
+            userSessions.get(sessionid).getAsyncRemote().sendText(sendParams.toString());
+        }
+        return responseParams;
     }
-    void sendSignal2User(String uid, String signal) throws IOException{
-        this.userSessions.get(uid).getAsyncRemote().sendText(signal);
-    }
+
 }

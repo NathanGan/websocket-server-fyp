@@ -38,8 +38,6 @@ public class UserController {
         String password = requestParams.getString("password");
         String type = requestParams.getString("userType");
         User user = new User(name,password,type);
-        StatusCode statusCode = null;
-//        UserService userService = new UserServiceImpl();
         userService = new UserServiceImpl("mysql");
         int uid = userService.signupUser(user);
         if(uid!=-1){
@@ -59,12 +57,17 @@ public class UserController {
      * MySQL
      * @throws Exception
      */
-    public JSONObject actionSignIn() throws IOException {
-        String name = requestParams.getString("name");
+    public JSONObject actionSignIn(String sessionid){
+        String name = requestParams.getString("username");
         String password = requestParams.getString("password");
-        User user = new User(name,password);
-        UserService userService = new UserServiceImpl("mysql");
-
+        String type = requestParams.getString("userType");
+        User user = new User(name,password,type,sessionid);
+        UserService userService = null;
+        try {
+            userService = new UserServiceImpl("mysql");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int uid = userService.signinUser(user);
         if(uid!=-1){
             responseParams.put("uid",uid);
@@ -127,4 +130,21 @@ public class UserController {
         System.out.println("actionChangeStatus");
         return responseParams;
     }
+
+    /**
+     * The method for get user's session id from MySQL by username
+     * @return session id
+     */
+    public String actionGetUserSession(){
+        System.out.println("actionGetUserSession");
+        try{
+            userService = new UserServiceImpl("mysql");
+            return userService.getUserSessionId(requestParams.getString("tname"));
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
 }

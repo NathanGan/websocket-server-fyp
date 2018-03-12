@@ -13,8 +13,10 @@ public interface UserService {
 
     public int signupUser(User user);
     public int signinUser(User user);
+    public int updateUserSession(User user);
     public int signoffUser(User user);
     public int updateUser(User user);
+    public String getUserSessionId(String name);
     public User getUserByName(String name);
     public User getUserByID(int uid);
     public ArrayList<User> getFriends(User user);
