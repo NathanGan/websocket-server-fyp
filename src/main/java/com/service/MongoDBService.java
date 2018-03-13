@@ -2,6 +2,7 @@ package com.service;
 
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,5 +16,5 @@ public interface MongoDBService {
     public Document getDocumentByName(String name);
     public Document getDocumentByTag(String name, String value);
     public MongoCursor<Document> getDocumentsByTags(ArrayList<String> constrains);
-
+    public void updateDocument(int uid,JSONArray location);
 }

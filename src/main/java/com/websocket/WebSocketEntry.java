@@ -36,7 +36,7 @@ public class WebSocketEntry {
         this.session = session;
         this.sessionId = session.getId();
         userSessions.put(this.sessionId,this.session);
-
+        System.out.println(userSessions.size());
         System.out.println("New Connection: "+sessionId);
     }
     //关闭时执行
@@ -80,6 +80,7 @@ public class WebSocketEntry {
             // update location information
             case "updateLoc":
                 userController = new UserController(requestParams);
+                System.out.println(requestParams);
                 responseParams = userController.actionUpdateLocation();
                 break;
             // show nearby restaurants

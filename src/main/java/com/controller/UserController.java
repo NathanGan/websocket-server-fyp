@@ -6,6 +6,7 @@ import com.service.UserService;
 import com.service.MongoDBServiceImpl;
 import com.service.UserServiceImpl;
 import com.util.StatusCode;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -108,8 +109,10 @@ public class UserController {
      * MongoDB
      */
     public JSONObject actionUpdateLocation(){
-        String name = requestParams.getString("name");
+        int uid = requestParams.getInt("uid");
+        JSONArray location = requestParams.getJSONArray("location");
         MongoDBService mongoDBService = new MongoDBServiceImpl("users");
+        mongoDBService.updateDocument(uid,location);
         System.out.println("actionUpdateLocation");
 
         return responseParams;

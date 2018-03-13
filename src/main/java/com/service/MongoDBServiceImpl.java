@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCursor;
 import com.service.MongoDBService;
 import com.util.MongoDbUtil;
 import org.bson.Document;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,13 +19,13 @@ public class MongoDBServiceImpl implements MongoDBService {
     private MongoCollection<Document> mongoCollection;
     public MongoDBServiceImpl(String type){
         if(type.equals("restaurants")){
-            mongoCollection = MongoDbUtil.instance.getMongoCollection("ShareT","restaurants");
+            mongoCollection = MongoDbUtil.instance.getMongoCollection("test","restaurants");
         }
         if(type.equals("users")){
-            mongoCollection = MongoDbUtil.instance.getMongoCollection("ShareT","users");
+            mongoCollection = MongoDbUtil.instance.getMongoCollection("test","user");
         }
         if(type.equals("orders'")){
-            mongoCollection = MongoDbUtil.instance.getMongoCollection("ShareT","orders");
+            mongoCollection = MongoDbUtil.instance.getMongoCollection("test","orders");
         }
     }
     public MongoCollection<Document> getMongoCollection(){
@@ -41,5 +42,8 @@ public class MongoDBServiceImpl implements MongoDBService {
     }
     public MongoCursor<Document> getDocumentsByTags(ArrayList<String> constrains) {
         return MongoDbUtil.instance.findByTags(mongoCollection, constrains);
+    }
+    public void updateDocument(int uid,JSONArray location){
+        MongoDbUtil.instance.updateDocument(mongoCollection,uid,location);
     }
 }
